@@ -2,10 +2,9 @@
   <main class="w100 h100 flex-center">
     <section class="tip">
       <h1>Connected</h1>
-      <p>Drag and drop files here to send to ___</p>
-      <p>Alternatively, use the button below to select files.</p>
-      <button class="fileInputButton" @click="uploadFiles">Upload Files</button>
+      <p>Upload files to be encrypted and sent to your other device.</p>
       <p>This will load your file into memory, so please be mindful of file size.</p>
+      <button class="fileInputButton" @click="uploadFiles">Upload Files</button>
     </section>
     <section>
       <section class="fileList">

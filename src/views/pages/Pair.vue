@@ -44,6 +44,17 @@
       </div>
     </template>
   </UI_Modal>
+  <UI_Modal v-bind:shown="showUBL" headerText="Unsupported Browser">
+    <template v-slot:body>
+      <p>Your browser, {{ browsername }}, is unsupported</p>
+      <p>If you continue, certain features may break or become unusable.</p>
+    </template>
+    <template v-slot:footer>
+      <div class="modalButtons">
+        <button class="buttonrow buttons" v-on:click="toggleBModal(false)">Close</button>
+      </div>
+    </template>
+  </UI_Modal>
 </template>
 
 <script lang="ts">
@@ -63,6 +74,7 @@ export default defineComponent({
   data: function () {
     return {
       mobile: this.$store.state.browserInfo?.mobile, // desktop debug - insert "true || " before this.$store
+      browsername: this.$store.state.browserInfo?.name, // desktop debug - insert "true || " before this.$store
       svgSrc: 'data:image/svg+xml,' + escape(this.$store.state.qrcodeData),
       scrollPos: 0,
       isScrolling: false,
@@ -74,6 +86,7 @@ export default defineComponent({
       isScanning: true,
       pairingLink: this.$store.state.qrcodeLink,
       showPairingURL: false,
+      showUBL: false,
       coyLinktext: 'Copy Link'
     }
   },
@@ -81,6 +94,9 @@ export default defineComponent({
     toggleModal: function (state: boolean) {
       this.coyLinktext = 'Copy Link'
       this.showPairingURL = state
+    },
+    toggleBModal: function (state: boolean) {
+      this.showUBL = state
     },
     copyLink: function (state: boolean) {
       navigator.clipboard.writeText(this.pairingLink).then(() => {
@@ -176,15 +192,20 @@ export default defineComponent({
     }
   },
   mounted: function () {
-    QRdecodeData(window.location.toString(), (data: Record<string, unknown>) => {
-      window.location.hash = ''
-      this.$store.dispatch('connectToClientSide', data)
-    }, () => {
-      if (this.mobile === true) {
-        this.startScanning()
-      }
+    if (this.mobile === true && this.browsername === 'safari') {
       this.isLoading = false
-    })
+      this.showUBL = true
+    } else {
+      QRdecodeData(window.location.toString(), (data: Record<string, unknown>) => {
+        window.location.hash = ''
+        this.$store.dispatch('connectToClientSide', data)
+      }, () => {
+        if (this.mobile === true) {
+          this.startScanning()
+        }
+        this.isLoading = false
+      })
+    }
   }
 })
 </script>

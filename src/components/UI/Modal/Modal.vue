@@ -37,6 +37,7 @@ main.modal {
     display:  flex;
     flex-flow: column;
     width: 500px;
+    max-width: 95vw;
 }
 
 .header {
