@@ -1,4 +1,4 @@
-# tunnel
+# Tunnel - Simple, secure and encrypted peer-to-perr file sharing
 
 ## Project setup
 ```
